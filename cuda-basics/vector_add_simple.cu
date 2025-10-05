@@ -4,10 +4,13 @@
  * Each thread adds one element of two input vectors A and B,
  * and stores the result in vector C.
  *
- * Demonstrates CPU → GPU memory copy, kernel launch, and GPU → CPU copy.
+ * Demonstrates:
+ - CPU → GPU memory copy
+ - Kernel launch
+ - GPU → CPU copy.
  *
- * Compile:  nvcc vector_add_logged.cu -o vector_add_logged
- * Run:      ./vector_add_logged
+ * Compile:  nvcc vector_add_simple.cu -o vector_add_simple
+ * Run:      ./vector_add_simple
  ****************************************************************************************/
 
 #include <iostream>
