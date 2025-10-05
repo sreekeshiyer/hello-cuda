@@ -13,12 +13,20 @@
 #include <iostream>
 #include <cuda_runtime.h>
 using namespace std;
+#define BLOCK_SIZE 256
 
 // ---------------- GPU Kernel ----------------
 __global__ void vectorAdd(const float *A, const float *B, float *C, int N) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;  // Compute global thread index
     if (i < N) {
         C[i] = A[i] + B[i];
+    }
+}
+
+// Initialize vector with random values
+void init_vector(float *vec, int n) {
+    for (int i = 0; i < n; i++) {
+        vec[i] = (float)rand() / RAND_MAX;
     }
 }
 
@@ -37,10 +45,8 @@ int main() {
     float *h_C = new float[N];
 
     // Initialize vectors A and B
-    for (int i = 0; i < N; i++) {
-        h_A[i] = i * 0.5f;
-        h_B[i] = i * 2.0f;
-    }
+    init_vector(h_A, N);
+    init_vector(h_B, N);
     cout << "    ✅ Host memory ready.\n";
 
     // 3. Allocate device (GPU) memory
@@ -59,12 +65,11 @@ int main() {
 
     // 5. Launch kernel on GPU
     cout << "[5] Launching kernel...\n";
-    int threadsPerBlock = 256;
-    int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
+    int blocksPerGrid = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
     cout << "    → Grid size: " << blocksPerGrid << " blocks\n";
-    cout << "    → Block size: " << threadsPerBlock << " threads\n";
+    cout << "    → Block size: " << BLOCK_SIZE << " threads\n";
 
-    vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
+    vectorAdd<<<blocksPerGrid, BLOCK_SIZE>>>(d_A, d_B, d_C, N);
     cudaDeviceSynchronize();
     cout << "    ✅ Kernel execution complete.\n";
 
@@ -73,9 +78,9 @@ int main() {
     cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
     cout << "    ✅ Results copied back.\n";
 
-    // 7. Display first 25 results (to verify correctness)
+    // 7. Display first 10 results (to verify correctness)
     cout << "[7] Sample Results:\n";
-    for (int i = 0; i < 25; i++)
+    for (int i = 0; i < 10; i++)
         cout << "    " << h_A[i] << " + " << h_B[i] << " = " << h_C[i] << "\n";
 
     // 8. Free GPU memory
