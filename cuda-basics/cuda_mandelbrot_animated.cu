@@ -1,9 +1,8 @@
 /****************************************************************************************
- * CUDA ASCII MANDELBROT (FIXED VISUAL VERSION)
- * Works well in most terminals (even SSH / EC2)
+ * CUDA ASCII MANDELBROT
  *
- * Compile:  nvcc cuda_mandelbrot_fixed.cu -o mandelbrot_fixed
- * Run:      ./mandelbrot_fixed
+ * Compile:  nvcc cuda_mandelbrot_animated.cu -o mandelbrot_animated
+ * Run:      ./mandelbrot_animated
  ****************************************************************************************/
 
 #include <iostream>
