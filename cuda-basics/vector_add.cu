@@ -70,14 +70,6 @@ int main() {
     // N = 1024, BLOCK_SIZE = 256, num_blocks = 4
     // (N + BLOCK_SIZE - 1) / BLOCK_SIZE = ( (1024 + 256 - 1) / 256 ) = 1279 / 256 = 4.99 ~ 4 (int) 
 
-    // Warm-up runs
-    printf("Performing warm-up runs...\n");
-    for (int i = 0; i < 3; i++) {
-        vector_add_cpu(h_a, h_b, h_c_cpu, N);
-        vector_add_gpu<<<num_blocks, BLOCK_SIZE>>>(d_a, d_b, d_c, N);
-        cudaDeviceSynchronize();
-    }
-
     // Benchmark CPU implementation
     printf("Benchmarking CPU implementation...\n");
     double cpu_total_time = 0.0;
