@@ -43,9 +43,10 @@ int main() {
 
     // 2. Allocate host (CPU) memory
     cout << "[2] Allocating host memory...\n";
-    float *h_A = new float[N];
-    float *h_B = new float[N];
-    float *h_C = new float[N];
+    float *h_A, *h_B, *h_C;
+    h_A = (float*)malloc(size);
+    h_B = (float*)malloc(size);
+    h_C = (float*)malloc(size);
 
     // Initialize vectors A and B
     init_vector(h_A, N);
@@ -73,7 +74,6 @@ int main() {
     cout << "    → Block size: " << BLOCK_SIZE << " threads\n";
 
     vectorAdd<<<blocksPerGrid, BLOCK_SIZE>>>(d_A, d_B, d_C, N);
-    cudaDeviceSynchronize();
     cout << "    ✅ Kernel execution complete.\n";
 
     // 6. Copy result from device → host
@@ -86,17 +86,19 @@ int main() {
     for (int i = 0; i < 10; i++)
         cout << "    " << h_A[i] << " + " << h_B[i] << " = " << h_C[i] << "\n";
 
-    // 8. Free GPU memory
-    cout << "[8] Freeing GPU memory...\n";
+    // 8. Free CPU memory
+    cout << "[8] Freeing host memory...\n";
+    free(h_A);
+    free(h_B);
+    free(h_C);
+
+    // 9. Free GPU memory
+    cout << "[9] Freeing GPU memory...\n";
     cudaFree(d_A);
     cudaFree(d_B);
     cudaFree(d_C);
 
-    // 9. Free CPU memory
-    cout << "[9] Freeing host memory...\n";
-    delete[] h_A;
-    delete[] h_B;
-    delete[] h_C;
+    
 
     cout << "\n✅ All done successfully!\n";
     cout << "======================================================\n";
