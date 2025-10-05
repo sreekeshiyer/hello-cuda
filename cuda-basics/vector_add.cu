@@ -68,7 +68,7 @@ int main() {
     // Define grid and block dimensions
     int num_blocks = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
     // N = 1024, BLOCK_SIZE = 256, num_blocks = 4
-    // (N + BLOCK_SIZE - 1) / BLOCK_SIZE = ( (1025 + 256 - 1) / 256 ) = 1280 / 256 = 4 rounded 
+    // (N + BLOCK_SIZE - 1) / BLOCK_SIZE = ( (1024 + 256 - 1) / 256 ) = 1279 / 256 = 4.99 ~ 4 (int) 
 
     // Warm-up runs
     printf("Performing warm-up runs...\n");
